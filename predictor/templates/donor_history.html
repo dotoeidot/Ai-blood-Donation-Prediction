@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Donor History</title>
+
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+
+        .container {
+            background: white;
+            width: 420px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #b31217;
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Donor History</h2>
+        <p>Please provide your donation history</p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- NEW FIELD -->
+            <div class="form-group">
+                <label>City</label>
+                <input type="text" name="city" placeholder="Enter your city" required>
+            </div>
+
+            <!-- NEW FIELD -->
+            <div class="form-group">
+                <label>Blood Group</label>
+                <select name="blood_group" required>
+                    <option value="">Select blood group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Number of Donations</label>
+                <input type="number" name="donation_count" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label>Months Since First Donation</label>
+                <input type="number" name="months_since_first_donation" min="0" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Months Since Last Donation</label>
+                <input type="number" name="recency_months" min="0" required>
+            </div>
+
+            <button type="submit">Continue</button>
+        </form>
+    </div>
+</body>
+</html>

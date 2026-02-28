@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Donor Matching Result</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Inter", "Poppins", system-ui, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .dashboard {
+            width: 100%;
+            max-width: 900px;
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+            padding: 35px;
+        }
+
+        .header {
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #111827;
+        }
+
+        .header p {
+            margin-top: 8px;
+            color: #6b7280;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #f9fafb;
+            border-radius: 14px;
+            padding: 22px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .card h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: #374151;
+        }
+
+        .big-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #b31217;
+        }
+
+        .badge {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .priority-high {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .priority-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .priority-low {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .info-list {
+            margin: 0;
+            padding-left: 18px;
+            color: #374151;
+        }
+
+        .info-list li {
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            margin-top: 35px;
+            text-align: right;
+        }
+
+        .footer a button {
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: none;
+            background: #b31217;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .footer a button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>Smart Donor Matching Result</h1>
+        <p>AI-driven analysis of donor eligibility, engagement, and matching priority</p>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid">
+
+        <!-- Donation Probability -->
+        <div class="card">
+            <h3>Donation Likelihood</h3>
+            <div class="big-number">{{ ml_probability }}%</div>
+            <span class="badge">High Confidence</span>
+        </div>
+
+        <!-- Priority -->
+        <div class="card">
+            <h3>Donor Priority</h3>
+            <div class="big-number">{{ priority }}</div>
+
+            {% if priority == "HIGH" %}
+                <span class="badge priority-high">Immediate Match</span>
+            {% elif priority == "MEDIUM" %}
+                <span class="badge priority-medium">Potential Match</span>
+            {% else %}
+                <span class="badge priority-low">Low Priority</span>
+            {% endif %}
+        </div>
+
+        <!-- Match Score -->
+        <div class="card">
+            <h3>Smart Match Score</h3>
+            <div class="big-number">{{match_score }} / 100</div>
+            <p style="margin-top:8px;color:#6b7280;">Overall suitability score</p>
+        </div>
+
+        <!-- Recommendation -->
+        <div class="card">
+            <h3>Recommended Match</h3>
+            <p><strong>City:</strong> {{ city }}</p>
+            <p><strong>Blood Group Demand:</strong> {{ blood_group }}</p>
+        </div>
+
+    </div>
+
+    <!-- EXPLANATION -->
+    <div class="card" style="margin-top:25px;">
+        <h3>Why this donor was ranked {{ priority|lower }}</h3>
+      <ul class="info-list">
+    {% for reason in reasons %}
+        <li>{{ reason }}</li>
+    {% endfor %}
+</ul>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <a href="/">
+            <button>Check Another Donor</button>
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

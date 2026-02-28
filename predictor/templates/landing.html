@@ -1,0 +1,501 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blood Donation Prediction</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --crimson: #C8102E;
+    --crimson-dark: #8B0000;
+    --crimson-glow: rgba(200,16,46,0.15);
+    --off-white: #FAF7F2;
+    --ink: #1A1010;
+    --muted: #6B5050;
+    --card-bg: #FFF5F5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(250,247,242,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(200,16,46,0.1);
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: var(--crimson);
+    letter-spacing: -0.5px;
+  }
+
+  .logo span { color: var(--ink); }
+
+  .try-btn {
+    background: var(--crimson);
+    color: #fff;
+    border: none;
+    padding: 0.65rem 1.6rem;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 18px rgba(200,16,46,0.35);
+  }
+
+  .try-btn:hover {
+    background: var(--crimson-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(200,16,46,0.45);
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 7rem 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 70% at 75% 50%, rgba(200,16,46,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 30% 40% at 20% 80%, rgba(200,16,46,0.05) 0%, transparent 60%);
+  }
+
+  /* blood drop deco */
+  .drop-deco {
+    position: absolute;
+    right: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 320px;
+    height: 380px;
+    opacity: 0.06;
+  }
+
+  .hero-content {
+    position: relative;
+    max-width: 640px;
+    animation: fadeUp 0.9s ease both;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--crimson);
+    border: 1px solid rgba(200,16,46,0.3);
+    padding: 0.3rem 0.8rem;
+    border-radius: 2px;
+    margin-bottom: 1.6rem;
+    animation: fadeUp 0.9s 0.1s ease both;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.08;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.9s 0.2s ease both;
+  }
+
+  h1 em {
+    color: var(--crimson);
+    font-style: italic;
+  }
+
+  .hero-desc {
+    font-size: 1.08rem;
+    line-height: 1.75;
+    color: var(--muted);
+    max-width: 520px;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    animation: fadeUp 0.9s 0.3s ease both;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    animation: fadeUp 0.9s 0.4s ease both;
+  }
+
+  .cta-primary {
+    background: var(--crimson);
+    color: #fff;
+    padding: 0.85rem 2rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 6px 24px rgba(200,16,46,0.38);
+    transition: all 0.2s;
+  }
+
+  .cta-primary:hover { background: var(--crimson-dark); transform: translateY(-2px); }
+
+  .cta-link {
+    color: var(--muted);
+    font-size: 0.9rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--crimson);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    gap: 5rem;
+    padding: 2.2rem 3rem;
+    animation: fadeUp 1s 0.5s ease both;
+  }
+
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.78rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-top: 0.2rem;
+  }
+
+  /* HOW IT WORKS */
+  section {
+    padding: 6rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--crimson);
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 580px;
+    margin-bottom: 3.5rem;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem;
+  }
+
+  .step-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(200,16,46,0.12);
+    border-radius: 8px;
+    padding: 2rem;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .step-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(200,16,46,0.1);
+  }
+
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: rgba(200,16,46,0.12);
+    line-height: 1;
+    margin-bottom: 0.8rem;
+  }
+
+  .step-title {
+    font-weight: 500;
+    font-size: 1.05rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .step-text {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  /* ABOUT */
+  .about-section {
+    background: var(--ink);
+    color: var(--off-white);
+    padding: 6rem 3rem;
+  }
+
+  .about-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .about-section .section-label { color: #e06070; }
+  .about-section .section-desc { color: rgba(250,247,242,0.6); }
+
+  .about-features {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .feature {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .feature-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(200,16,46,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .feature-icon svg { width: 16px; height: 16px; fill: #e06070; }
+
+  .feature-text h4 {
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+    font-size: 1rem;
+  }
+
+  .feature-text p {
+    font-size: 0.88rem;
+    color: rgba(250,247,242,0.55);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 3rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    border-top: 1px solid rgba(200,16,46,0.1);
+  }
+
+  footer .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    color: var(--crimson);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 700px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero { padding: 6rem 1.5rem 3rem; }
+    .stats-bar { gap: 2.5rem; flex-wrap: wrap; padding: 2rem 1.5rem; }
+    section { padding: 4rem 1.5rem; }
+    .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .about-section { padding: 4rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+
+
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="max-width:none; padding-top:7rem; padding-bottom:4rem;">
+  <div class="hero-bg"></div>
+  <svg class="drop-deco" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M100 10 C100 10, 20 100, 20 150 C20 195 56 230 100 230 C144 230 180 195 180 150 C180 100 100 10 100 10Z" fill="#C8102E"/>
+  </svg>
+  <div class="hero-content">
+    <span class="eyebrow">AI-Powered Healthcare</span>
+    <h1>Predict Blood<br/><em>Donation</em> Outcomes<br/>with Precision</h1>
+    <p class="hero-desc">
+      The website uses machine learning to forecast whether a donor will donate blood in a given time window — helping blood banks optimize campaigns, reduce shortages, and save more lives.
+    </p>
+    <div class="hero-cta">
+      <button class="cta-primary"
+        onclick="window.location.href='{% url 'home' %}'">
+    Try the Prediction →
+</button>
+      <span class="cta-link" onclick="slowScrollTo('how-it-works')">Learn how it works</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat"><span class="stat-num">92%</span><span class="stat-label">Model Accuracy</span></div>
+  <div class="stat"><span class="stat-num">XGBoost</span><span class="stat-label">Model</span></div>
+  <div class="stat"><span class="stat-num">Smart</span><span class="stat-label">Matching System</span></div>
+  <div class="stat"><span class="stat-num">Real-time</span><span class="stat-label">Predictions</span></div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <p class="section-label">How It Works</p>
+  <h2 class="section-title">From Donor History<br/>to Prediction in Seconds</h2>
+  <p class="section-desc">Our model uses XGBoost — analyzing recency, frequency, monetary value, time, and total count of blood donations to determine likelihood of future donation.</p>
+
+  <div class="steps">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div class="step-title">Input Donor Data</div>
+      <p class="step-text">Enter the donor's recency (months since last donation), frequency (total donations), total blood volume donated, and time since first donation.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-title">ML Prediction</div>
+      <p class="step-text">The system applies RFMTC transformations and normalizes the input, preparing it for the trained classification model with high-dimensional feature mapping.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div class="step-title">Smart Matching System</div>
+      <p class="step-text">A trained machine learning classifier optimized on blood donation data produces a matching score of a donor with a matching receiver.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">04</div>
+      <div class="step-title">Ethically Designed</div>
+      <p class="step-text">Blood banks receive a clear Yes/No prediction with confidence score, enabling smarter outreach campaigns and better inventory management.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<div class="about-section">
+  <div class="about-inner">
+    <div>
+      <p class="section-label">About the Project</p>
+      <h2 class="section-title" style="color:#FAF7F2">Why Blood Donation<br/>Prediction Matters</h2>
+      <p class="section-desc">Blood shortages affect millions of surgeries, trauma cases, and cancer treatments every year. By predicting donor behavior, hospitals can proactively engage likely donors before supply drops critically low.</p>
+    </div>
+    <div class="about-features">
+
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3V3zm2 2v14h14V5H5zm2 2h10v2H7V7zm0 4h10v2H7v-2zm0 4h7v2H7v-2z"/></svg>
+        </div>
+        <div class="feature-text">
+          <h4>Interpretable Results</h4>
+          <p>Each prediction comes with feature importance explanations so medical staff understand the reasoning, not just the output.</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        </div>
+        <div class="feature-text">
+          <h4>Ethically Designed</h4>
+          <p>Privacy-preserving by design — no personally identifiable information is required. Predictions are based solely on behavioral donation patterns.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  Blood Donation Prediction — Powered by Machine Learning &nbsp;·&nbsp; Built to save lives
+</footer>
+
+<script>
+function slowScrollTo(id) {
+  const target = document.getElementById(id);
+  const targetY = target.getBoundingClientRect().top + window.scrollY;
+  const startY = window.scrollY;
+  const distance = targetY - startY;
+  const duration = 2200; // ms — slow and visible
+  let startTime = null;
+
+  function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  function step(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const elapsed = timestamp - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = easeInOutCubic(progress);
+    window.scrollTo(0, startY + distance * ease);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+
+  requestAnimationFrame(step);
+}
+</script>
+</body>
+</html>

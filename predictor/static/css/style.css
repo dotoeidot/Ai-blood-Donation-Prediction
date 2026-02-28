@@ -1,0 +1,126 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ===== PAGE LAYOUT ===== */
+body.home-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* ===== BLURRED BACKGROUND (FIXED) ===== */
+body.home-page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url("/static/images/bg.jpg") no-repeat center center / cover;
+    filter: blur(10px);
+    transform: scale(1.15);
+    z-index: -1;
+}
+
+/* ===== MAIN CARD ===== */
+.container {
+    background: rgba(255, 255, 255, 0.88);
+    width: 380px;
+    padding: 35px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    z-index: 2;
+}
+
+/* ===== FORM ===== */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #b31217;
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* ===== NUCLEAR CHECKBOX HIDE ===== */
+#menu-toggle {
+    position: fixed !important;
+    left: -9999px !important;
+    opacity: 0 !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    pointer-events: none !important;
+}
+
+/* ===== HAMBURGER ICON ===== */
+.hamburger {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 30px;
+    cursor: pointer;
+    z-index: 3000;
+}
+
+.hamburger span {
+    display: block;
+    height: 4px;
+    width: 100%;
+    background: #b31217;
+    margin: 6px 0;
+    border-radius: 2px;
+}
+
+/* ===== SIDE MENU ===== */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -220px;
+    width: 200px;
+    height: 100vh;
+    background: rgba(226, 226, 226, 0.95);
+    padding-top: 80px;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+    transition: left 0.3s ease;
+    z-index: 2500;
+}
+
+.side-menu a {
+    display: block;
+    padding: 15px 20px;
+    background-color: #b31217;   
+        color: #ffffff;             
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 6px;          
+    margin: 10px 15px;           
+    text-align: center;
+}
+
+.side-menu a:hover {
+    background-color: #8f0e12;
+}
+
+/* ===== MENU TOGGLE ===== */
+#menu-toggle:checked + .hamburger + .side-menu {
+    left: 0;
+}
